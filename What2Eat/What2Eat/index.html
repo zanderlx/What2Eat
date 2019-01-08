@@ -1,19 +1,35 @@
 ﻿<!DOCTYPE html>
 <html>
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="APICall.aspx.cs" Inherits="WebApplication1.APICall" %>
-<head runat="server">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-    <script>
-         $(document).ready(function () {
-             $("#Save").click(function () {
-                 $.get('http://localhost:64531/api/businesses', function (business) {
-                     console.log('Information' + business);
-                 });
-             });
-         });
-    </script>
+Get Yelp API Data
+<head>
+    
 </head>
 <body>
-    <input type="button" id="Save" value="Save Data" />
+    <input type="button" value="run" onclick="getLocation()"/>
+    
+    <p id="demo"></p>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
+    <script>
+        var x = document.getElementById("demo");
+
+        function getLocation() {
+            if (navigator.geolocation) navigator.geolocation.getCurrentPosition(setPosition);
+            else x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+
+        function setPosition(position) {
+            var city = "cerritos,ca";
+            x.innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
+            $(document).ready(function () {
+                $.get('http://localhost:64531/api/businesses'
+                    .concat("?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude),
+                    function (business) {
+                    console.log('Information' + business);
+                });
+            });
+
+        }
+    </script>
 </body>
 </html>

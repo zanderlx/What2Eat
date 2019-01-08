@@ -13,16 +13,21 @@ namespace What2Eat.Services
         private const string URL = "https://api.yelp.com/v3/businesses/search";
         readonly Random rand = new Random();
 
-        // RootObject containss business array
+        // RootObject contains business array
         public RootObject RootObject { get; set; }
         public string FullApiResponse { get; set; }
+        public string UserLatitude { get; set; }
+        public string UserLongitude { get; set; }
 
         public YelpAPI()
         {
-            // Stores HttpResponseMessage as string
-            FullApiResponse = ConsumeYelpApi().Result;
             // Stores all businesses retrieved from response
-            RootObject = GetBusinesses();
+            RootObject = null;
+            // Stores HttpResponseMessage as string
+            FullApiResponse = "";
+            // User position is not found yet
+            UserLatitude = "";
+            UserLongitude = "";
         }
 
         /// <summary>
@@ -34,15 +39,15 @@ namespace What2Eat.Services
         {
             HttpClient client = new HttpClient()
             {
-                // Sets the base address of the client the endpoint we want
                 BaseAddress = new Uri(URL)
             };
-            
+        
             // Add authorization header needed for Yelp API
-            client.DefaultRequestHeaders
+            client
+                .DefaultRequestHeaders
                 .Authorization = new AuthenticationHeaderValue("Bearer", AuthData.Key);
 
-            HttpResponseMessage response = client.GetAsync("?location=cerritos,ca").Result;
+            HttpResponseMessage response = client.GetAsync("?latitude="+UserLatitude+"&longitude="+UserLongitude).Result;
             // Return response only if 200 status code
             if (response.IsSuccessStatusCode)
                 return await response.Content.ReadAsStringAsync();     

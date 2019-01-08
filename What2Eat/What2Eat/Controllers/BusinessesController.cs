@@ -10,8 +10,12 @@ namespace What2Eat.Controllers
         YelpAPI Api = new YelpAPI();
 
         // GET: api/Businesses
-        public IEnumerable<Business> Get()
+        public IEnumerable<Business> Get(string latitude, string longitude)
         {
+            Api.UserLatitude = latitude;
+            Api.UserLongitude = longitude;
+            Api.FullApiResponse = Api.ConsumeYelpApi().Result;
+            Api.RootObject = Api.GetBusinesses();
             return Api.RootObject.businesses;
         }
 
@@ -26,6 +30,7 @@ namespace What2Eat.Controllers
         // PUT: api/Businesses/5
         public void Put(int id, [FromBody]string value)
         {
+
         }
 
         // DELETE: api/Businesses/5

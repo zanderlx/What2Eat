@@ -26,7 +26,7 @@ namespace What2Eat
                 name: "DefaultApiGet",
                 routeTemplate: "api/{controller}",
                 defaults: new { action = "Get" }, 
-                constraints: new {httpMethod = new HttpMethodConstraint(HttpMethod.Get) }
+                constraints: new { httpMethod = new HttpMethodConstraint(HttpMethod.Get) }
             );
         }
     }
